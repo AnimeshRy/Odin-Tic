@@ -38,10 +38,23 @@ const boxClicked = (e) => {
             playText.innerText = `${currentPlayer} has won!`;
             return;
         }
+        if (checkTie()) {
+            playText.innerText =  `It's Tie`
+            return;
+        }
         currentPlayer = currentPlayer === O_text ? X_text : O_text;
     }
 };
 
+const checkTie = () => {
+    let count = 0;
+    spaces.forEach(space => {
+        if (["X", "O"].includes(space)) {
+            count++;
+        }
+    });
+    if (count>=9) return true;
+}
 const playerHasWon = () => {
     if ((spaces[6] === currentPlayer && spaces[7] === currentPlayer && spaces[8] === currentPlayer) || (spaces[3] === currentPlayer && spaces[4] === currentPlayer && spaces[5] === currentPlayer) || (spaces[0] === currentPlayer && spaces[1] === currentPlayer && spaces[2] === currentPlayer) || (spaces[0] === currentPlayer && spaces[4] === currentPlayer && spaces[8] === currentPlayer) || (spaces[2] === currentPlayer && spaces[4] === currentPlayer && spaces[6] === currentPlayer) || (spaces[0] === currentPlayer && spaces[3] === currentPlayer && spaces[6] === currentPlayer) || (spaces[1] === currentPlayer && spaces[4] === currentPlayer && spaces[7] === currentPlayer) || (spaces[2] === currentPlayer && spaces[5] === currentPlayer && spaces[8] === currentPlayer)) 
         return true;
