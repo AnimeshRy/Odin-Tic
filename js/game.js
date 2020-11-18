@@ -81,7 +81,7 @@ function init(player, OPPONENT) {
     // draw the move on board
     drawOnBoard(currentPlayer, i, j);
 
-    // Check if the play wins
+    // Check if the player wins
     if (isWinner(gameData, currentPlayer)) {
       showGameOver(currentPlayer);
       GAME_OVER = true;
