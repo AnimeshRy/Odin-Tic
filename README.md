@@ -2,7 +2,8 @@
 
 The is a JavaScript Project for [The Odin Project](https://www.theodinproject.com/).
 
-If you have never played TicTacToe before (hard to beleive), check out [How to Play!](https://www.exploratorium.edu/brain_explorer/tictactoe.html).
+If you have never played TicTacToe before (hard to believe
+), check out [How to Play!](https://www.exploratorium.edu/brain_explorer/tictactoe.html).
 
 ## Minimax
 The AI part used the Minimax Algorithm and backtracking every and finding the path with the maximum evaluation and move to it.
