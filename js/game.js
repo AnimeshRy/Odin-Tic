@@ -81,7 +81,7 @@ function init(player, OPPONENT) {
     // draw the move on board
     drawOnBoard(currentPlayer, i, j);
 
-    // Check if the player wins
+    // Check if the play wins
     if (isWinner(gameData, currentPlayer)) {
       showGameOver(currentPlayer);
       GAME_OVER = true;
@@ -95,9 +95,124 @@ function init(player, OPPONENT) {
       return;
     }
 
-    // GIVE TURN TO THE OTHER PLAYER
-    currentPlayer = currentPlayer == player.man ? player.friend : player.man;
+    if (OPPONENT == "computer") {
+      // get id of space using minimax algorithm
+      let id = minimax(gameData, player.computer).id;
+
+      // store the player's move to gameData
+      gameData[id] = player.computer;
+
+      // get i and j of space
+      let space = getIJ(id);
+
+      // draw the move on board
+      drawOnBoard(player.computer, space.i, space.j);
+
+      // Check if the play wins
+      if (isWinner(gameData, player.computer)) {
+        showGameOver(player.computer);
+        GAME_OVER = true;
+        return;
+      }
+
+      // check if it's a tie game
+      if (isTie(gameData)) {
+        showGameOver("tie");
+        GAME_OVER = true;
+        return;
+      }
+    } else {
+      // GIVE TURN TO THE OTHER PLAYER
+      currentPlayer = currentPlayer == player.man ? player.friend : player.man;
+    }
   });
+
+  // MINIMAX
+  function minimax(gameData, PLAYER) {
+    // BASE
+    if (isWinner(gameData, player.computer)) return { evaluation: +10 };
+    if (isWinner(gameData, player.man)) return { evaluation: -10 };
+    if (isTie(gameData)) return { evaluation: 0 };
+
+    // LOOK FOR EMTY SPACES
+    let EMPTY_SPACES = getEmptySpaces(gameData);
+
+    // SAVE ALL MOVES AND THEIR EVALUATIONS
+    let moves = [];
+
+    // LOOP OVER THE EMPTY SPACES TO EVALUATE THEM
+    for (let i = 0; i < EMPTY_SPACES.length; i++) {
+      // GET THE ID OF THE EMPTY SPACE
+      let id = EMPTY_SPACES[i];
+
+      // BACK UP THE SPACE
+      let backup = gameData[id];
+
+      // MAKE THE MOVE FOR THE PLAYER
+      gameData[id] = PLAYER;
+
+      // SAVE THE MOVE'S ID AND EVALUATION
+      let move = {};
+      move.id = id;
+      // THE MOVE EVALUATION
+      if (PLAYER == player.computer) {
+        move.evaluation = minimax(gameData, player.man).evaluation;
+      } else {
+        move.evaluation = minimax(gameData, player.computer).evaluation;
+      }
+
+      // RESTORE SPACE
+      gameData[id] = backup;
+
+      // SAVE MOVE TO MOVES ARRAY
+      moves.push(move);
+    }
+
+    // MINIMAX ALGORITHM
+    let bestMove;
+
+    if (PLAYER == player.computer) {
+      // MAXIMIZER
+      let bestEvaluation = -Infinity;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].evaluation > bestEvaluation) {
+          bestEvaluation = moves[i].evaluation;
+          bestMove = moves[i];
+        }
+      }
+    } else {
+      // MINIMIZER
+      let bestEvaluation = +Infinity;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].evaluation < bestEvaluation) {
+          bestEvaluation = moves[i].evaluation;
+          bestMove = moves[i];
+        }
+      }
+    }
+
+    return bestMove;
+  }
+
+  // GET EMPTY SPACES
+  function getEmptySpaces(gameData) {
+    let EMPTY = [];
+
+    for (let id = 0; id < gameData.length; id++) {
+      if (!gameData[id]) EMPTY.push(id);
+    }
+
+    return EMPTY;
+  }
+
+  // GET i AND j of a SPACE
+  function getIJ(id) {
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (board[i][j] == id) return { i: i, j: j };
+      }
+    }
+  }
 
   // check for a winner
   function isWinner(gameData, player) {
