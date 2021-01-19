@@ -6,7 +6,7 @@ If you have never played TicTacToe before (hard to believe
 ), check out [How to Play!](https://www.exploratorium.edu/brain_explorer/tictactoe.html).
 
 ## Minimax
-The AI part used the Minimax Algorithm and backtracking every and finding the path with the maximum evaluation and move to it.
+This project uses the Minimax Algorithm and backtracks every possible path and evaluates with minimum and maximum values and selects a move accordingly.
 
 #### To Give a Visual Representation
 
